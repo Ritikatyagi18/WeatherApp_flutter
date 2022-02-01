@@ -25,7 +25,7 @@ class _HomeState extends State<Home>{
   String message = 'Unable to get air quality';
   String city = 'Error';
   void updateUI(aqiData, cityName){
-    aqi= aqiData['List'][0]['main']['aqi'];
+    aqi= aqiData['list'][0]['main']['aqi'];
     co = aqiData['list'][0]['components']['co'].toInt();
     no =
         aqiData['list'][0]['components']['no'].toInt();
