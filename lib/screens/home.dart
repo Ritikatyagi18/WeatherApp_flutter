@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:weather/services/air_quality.dart';
 import 'package:weather/widgets/pollutant_card.dart';
+import 'package:weather/services/temperature.dart';
 
 class Home extends StatefulWidget {
   static String id = 'home';
   final locationAQI;
   final CITY;
-  Home({this.locationAQI,this.CITY});
+  final temperature;
+  Home({this.locationAQI,this.CITY,this.temperature});
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home>{
   AirPollutionModel airPollutionModel=AirPollutionModel();
-  int aqi = 0;
+  WeatherModel weatherModel=WeatherModel();
+
   int co = 0;
   int no = 0;
   int no2 = 0;
@@ -22,10 +25,13 @@ class _HomeState extends State<Home>{
   int pm2_5 = 0;
   int pm10 = 0;
   int nh3 = 0;
-  String message = 'Unable to get air quality';
+  num t=0;
+  num tmin=0;
+  num tmax=0;
+
   String city = 'Error';
-  void updateUI(aqiData, cityName){
-    aqi= aqiData['list'][0]['main']['aqi'];
+  void updateUI(dynamic aqiData,String cityName,dynamic weatherData){
+
     co = aqiData['list'][0]['components']['co'].toInt();
     no =
         aqiData['list'][0]['components']['no'].toInt();
@@ -41,14 +47,17 @@ class _HomeState extends State<Home>{
         aqiData['list'][0]['components']['pm10'].toInt();
     nh3 =
         aqiData['list'][0]['components']['nh3'].toInt();
-    message=airPollutionModel.getMessage(aqi);
+
     city=cityName;
+    t=weatherData['main']['temp'];
+    tmin=weatherData['main']['temp_min'];
+    tmax=weatherData['main']['temp_max'];
   }
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    updateUI(widget.locationAQI, widget.CITY);
+    updateUI(widget.locationAQI, widget.CITY,widget.temperature);
   }
 
   @override
@@ -66,33 +75,27 @@ class _HomeState extends State<Home>{
                 city,
                 style: TextStyle(
                   letterSpacing: -1,
-                  fontSize: 35.0,
+                  fontSize: 29.0,
+                  fontFamily: "Zilla Slab",
                 ),
               ),
             ),
             const SizedBox(
               height: 5.0,
             ),
-             Center(
-              child: Text('$aqi',
-                style: TextStyle(
-                  letterSpacing: -1,
-                  fontSize: 17.0,
-                ),
-              ),
-            ),
-            const Center(
+
+            Center(
               child: Text(
-                '1',
+                '$t'+"°C",
                 style: TextStyle(
                   letterSpacing: -1,
-                  fontSize: 70.0,
+                  fontSize: 30.0,
                 ),
               ),
             ),
             Center(
               child: Text(
-                message,
+                "H : "+'$tmax'+"°C"+"  L : "+'$tmin'+"°C",
                 style: TextStyle(
                   letterSpacing: -1,
                   fontSize: 17.0,

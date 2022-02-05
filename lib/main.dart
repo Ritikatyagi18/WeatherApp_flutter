@@ -10,7 +10,7 @@ class Weather extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: Home.id,
+      initialRoute: LoadingScreen.id,
       routes: {
         Home.id: (context) => Home(),
         LoadingScreen.id: (context) => LoadingScreen(),
